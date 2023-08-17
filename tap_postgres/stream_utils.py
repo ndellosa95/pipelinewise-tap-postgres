@@ -77,14 +77,11 @@ def refresh_streams_schema(conn_config: Dict, streams: List[Dict]):
     # For every stream, update the schema and metadata from the corresponding discovered stream
     for idx, stream in enumerate(streams):
         discovered_stream = new_discovery[stream['tap_stream_id']]
-        
         if not stream.get('schema', {}).get('properties'):
             discovered_schema = copy.deepcopy(discovered_stream['schema'])
             LOGGER.info('Overriding schema for %s with %s', stream['tap_stream_id'], discovered_schema)
             streams[idx]['schema'] = discovered_schema
-            
         streams[idx]['metadata'] = _merge_stream_metadata(stream, discovered_stream)
-
     LOGGER.debug('Updated streams schemas %s', streams)
 
 
